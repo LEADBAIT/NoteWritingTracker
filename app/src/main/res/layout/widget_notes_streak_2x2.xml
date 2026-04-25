@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Place at: NoteWritingTracker/app/src/main/res/layout/widget_notes_streak_2x2.xml
+     Compact vertical layout for ~2×2 cell sizes (minWidth < 200dp).
+     RemoteViews only supports a subset of views: LinearLayout, FrameLayout,
+     RelativeLayout, TextView, ImageView, Button, ProgressBar, etc.
+     ConstraintLayout is NOT supported in widgets. -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/widget_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="12dp"
+    android:background="@drawable/widget_background">
+
+    <!-- Flame emoji rendered as text for zero-dependency icon -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="🔥"
+        android:textSize="28sp"
+        android:gravity="center" />
+
+    <!-- Streak count — color set programmatically (green when logged, grey when not) -->
+    <TextView
+        android:id="@+id/tv_streak_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0"
+        android:textSize="46sp"
+        android:textStyle="bold"
+        android:textColor="#FFFFFF"
+        android:gravity="center"
+        android:includeFontPadding="false" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/label_day_streak"
+        android:textSize="11sp"
+        android:textColor="#B0B0B0"
+        android:gravity="center"
+        android:letterSpacing="0.05" />
+
+    <!-- Combined "Mon, Apr 25  ✓ Logged" or "Mon, Apr 25  Tap to log" -->
+    <TextView
+        android:id="@+id/tv_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:text=""
+        android:textSize="9sp"
+        android:textColor="#9E9E9E"
+        android:gravity="center"
+        android:maxLines="1"
+        android:ellipsize="end" />
+
+</LinearLayout>

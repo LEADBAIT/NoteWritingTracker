@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Place at: NoteWritingTracker/app/src/main/res/values/dimens.xml -->
+<resources>
+    <dimen name="widget_padding">12dp</dimen>
+    <dimen name="widget_corner_radius">16dp</dimen>
+    <dimen name="streak_count_2x2">46sp</dimen>
+    <dimen name="streak_count_4x2">42sp</dimen>
+    <dimen name="flame_size_2x2">28sp</dimen>
+    <dimen name="flame_size_4x2">22sp</dimen>
+</resources>

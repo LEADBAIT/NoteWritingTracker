@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Place at: NoteWritingTracker/app/src/main/res/layout/widget_notes_streak_4x2.xml
+     Wide horizontal layout for ~4×2 cell sizes (minWidth >= 200dp).
+     Left panel: flame + streak number + "day streak" label.
+     Right panel: today's date, logged status, best streak. -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/widget_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:padding="14dp"
+    android:background="@drawable/widget_background">
+
+    <!-- LEFT: flame + number + label -->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:gravity="center">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="🔥"
+            android:textSize="22sp"
+            android:gravity="center" />
+
+        <TextView
+            android:id="@+id/tv_streak_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0"
+            android:textSize="42sp"
+            android:textStyle="bold"
+            android:textColor="#FFFFFF"
+            android:gravity="center"
+            android:includeFontPadding="false" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/label_day_streak"
+            android:textSize="10sp"
+            android:textColor="#B0B0B0"
+            android:gravity="center"
+            android:letterSpacing="0.05" />
+
+    </LinearLayout>
+
+    <!-- Vertical divider -->
+    <View
+        android:layout_width="1dp"
+        android:layout_height="56dp"
+        android:layout_gravity="center_vertical"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="#3A3A5C" />
+
+    <!-- RIGHT: date, log status, best streak -->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1.3"
+        android:orientation="vertical"
+        android:gravity="center_vertical"
+        android:paddingStart="4dp">
+
+        <!-- e.g. "Sat, Apr 25" -->
+        <TextView
+            android:id="@+id/tv_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textSize="12sp"
+            android:textColor="#B0B0B0" />
+
+        <!-- "✓ Logged" or "Tap to log" — color set programmatically -->
+        <TextView
+            android:id="@+id/tv_logged_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text=""
+            android:textSize="17sp"
+            android:textStyle="bold"
+            android:textColor="#9E9E9E" />
+
+        <!-- "Best: 47 days" -->
+        <TextView
+            android:id="@+id/tv_longest_streak"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text=""
+            android:textSize="11sp"
+            android:textColor="#7A7A9A" />
+
+    </LinearLayout>
+
+</LinearLayout>

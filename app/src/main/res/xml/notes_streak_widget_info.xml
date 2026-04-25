@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Place at: NoteWritingTracker/app/src/main/res/xml/notes_streak_widget_info.xml
+
+     Widget provider metadata. The widget starts at 2×2 (110dp × 110dp) and can be
+     resized horizontally by the user. When wider than ~200dp the provider switches
+     to the 4×2 layout automatically (see NotesStreakWidget.updateWidget).
+
+     updatePeriodMillis = 1800000 (30 min): Android batches widget updates; this is
+     the maximum polling interval. The widget also updates immediately on every tap
+     via the onReceive broadcast, so the timer is only for the daily date refresh. -->
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+    android:minWidth="110dp"
+    android:minHeight="110dp"
+    android:targetCellWidth="2"
+    android:targetCellHeight="2"
+    android:maxResizeWidth="500dp"
+    android:maxResizeHeight="220dp"
+    android:updatePeriodMillis="1800000"
+    android:initialLayout="@layout/widget_notes_streak_2x2"
+    android:resizeMode="horizontal|vertical"
+    android:widgetCategory="home_screen"
+    android:description="@string/widget_description" />

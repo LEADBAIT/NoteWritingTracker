@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Place at: NoteWritingTracker/app/src/main/res/values/colors.xml
+     Note: accent colors (green/grey) are applied programmatically in
+     NotesStreakWidget.kt so they can switch based on logged state. -->
+<resources>
+    <color name="widget_bg">#1A1A2E</color>
+    <color name="streak_logged">#4CAF50</color>
+    <color name="streak_pending">#9E9E9E</color>
+    <color name="text_primary">#FFFFFF</color>
+    <color name="text_secondary">#B0B0B0</color>
+    <color name="text_tertiary">#7A7A9A</color>
+    <color name="divider">#3A3A5C</color>
+</resources>

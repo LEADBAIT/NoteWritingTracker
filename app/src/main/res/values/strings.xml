@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Place at: NoteWritingTracker/app/src/main/res/values/strings.xml -->
+<resources>
+    <string name="app_name">Notes Streak</string>
+    <string name="label_day_streak">day streak</string>
+    <string name="widget_description">Track your daily Standard Notes writing streak</string>
+</resources>

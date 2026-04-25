@@ -1,0 +1,23 @@
+# Android
+*.iml
+.gradle/
+/local.properties
+/.idea/
+.DS_Store
+/build/
+/captures/
+.externalNativeBuild/
+.cxx/
+*.apk
+*.aab
+*.ap_
+
+# App build outputs
+/app/build/
+/app/release/
+
+# Kotlin
+*.class
+
+# Gradle wrapper jar (binary — regenerate with: gradle wrapper --gradle-version 8.4)
+gradle/wrapper/gradle-wrapper.jar
