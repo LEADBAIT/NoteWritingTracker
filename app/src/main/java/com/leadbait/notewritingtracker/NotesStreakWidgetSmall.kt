@@ -29,6 +29,9 @@ class NotesStreakWidgetSmall : AppWidgetProvider() {
             val streak   = data.getCurrentStreak()
 
             val views = RemoteViews(context.packageName, R.layout.widget_notes_streak_small)
+            val bgRes = if (isLogged) R.drawable.widget_background else R.drawable.widget_background_pending
+            views.setInt(R.id.widget_root_small, "setBackgroundResource", bgRes)
+            views.setFloat(R.id.tv_flame_small, "setAlpha", if (isLogged) 1.0f else 0.30f)
             views.setTextViewText(R.id.tv_streak_count_small, streak.toString())
             views.setTextColor(R.id.tv_streak_count_small, if (isLogged) COLOR_LOGGED else COLOR_PENDING)
 

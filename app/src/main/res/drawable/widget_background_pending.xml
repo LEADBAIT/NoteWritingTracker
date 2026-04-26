@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Pending state background: same dark base but with a cool blue-grey
+    radial glow centred in the middle — "cold/unlit" vs the warm amber
+    bottom glow of the logged state. Makes the unfulfilled state feel
+    clearly different at a glance.
+    Place at: NoteWritingTracker/app/src/main/res/drawable/widget_background_pending.xml
+-->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Dark base -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#0D0D1E" />
+            <corners android:radius="18dp" />
+        </shape>
+    </item>
+
+    <!-- Cool blue-grey radial glow at centre — "waiting to be filled" -->
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:type="radial"
+                android:gradientRadius="110dp"
+                android:centerX="0.5"
+                android:centerY="0.4"
+                android:startColor="#1A3A5080"
+                android:endColor="#003A5080" />
+            <corners android:radius="18dp" />
+        </shape>
+    </item>
+
+    <!-- Subtle inner border ring to signal "action needed" -->
+    <item
+        android:top="0dp" android:bottom="0dp"
+        android:left="0dp" android:right="0dp">
+        <shape android:shape="rectangle">
+            <stroke android:width="1dp" android:color="#1E2A4A" />
+            <corners android:radius="18dp" />
+            <solid android:color="#00000000" />
+        </shape>
+    </item>
+
+</layer-list>

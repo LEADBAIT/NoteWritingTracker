@@ -150,6 +150,14 @@ class NotesStreakWidget : AppWidgetProvider() {
 
             val accentColor = if (isLogged) COLOR_LOGGED else COLOR_PENDING
             val statusText  = if (isLogged) "✓ Logged" else "Tap twice to log"
+            val flameAlpha  = if (isLogged) 1.0f else 0.30f
+            val bgRes       = if (isLogged) R.drawable.widget_background
+                              else          R.drawable.widget_background_pending
+
+            // Switch background between warm (logged) and cold (pending)
+            views.setInt(R.id.widget_root, "setBackgroundResource", bgRes)
+            // Dim the flame when unlogged so it looks visually "unlit"
+            views.setFloat(R.id.tv_flame, "setAlpha", flameAlpha)
 
             views.setTextViewText(R.id.tv_streak_count, streak.toString())
             views.setTextColor(R.id.tv_streak_count, accentColor)
