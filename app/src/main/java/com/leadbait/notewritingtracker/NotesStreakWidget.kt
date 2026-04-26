@@ -71,29 +71,58 @@ class NotesStreakWidget : AppWidgetProvider() {
         }
 
         private fun showTapFeedback(context: Context, manager: AppWidgetManager) {
-            // Large widgets: update status text to amber "Tap again!"
+            val data    = WidgetDataManager(context)
+            val streak  = data.getCurrentStreak()
+            val longest = data.getLongestStreak()
+            val isLogged = data.isLoggedToday()
+            val accentColor = if (isLogged) COLOR_LOGGED else COLOR_PENDING
+
             val ids = manager.getAppWidgetIds(ComponentName(context, NotesStreakWidget::class.java))
             for (id in ids) {
-                val options = manager.getAppWidgetOptions(id)
+                val options  = manager.getAppWidgetOptions(id)
                 val minWidth = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH, 0)
-                val isWide = minWidth >= WIDE_LAYOUT_THRESHOLD_DP
+                val isWide   = minWidth >= WIDE_LAYOUT_THRESHOLD_DP
                 val layoutRes = if (isWide) R.layout.widget_notes_streak_4x2
                                else        R.layout.widget_notes_streak_2x2
                 val views = RemoteViews(context.packageName, layoutRes)
+
+                // Always keep the streak number correct — this was the source of the 0-flash bug.
+                views.setTextViewText(R.id.tv_streak_count, streak.toString())
+                views.setTextColor(R.id.tv_streak_count, accentColor)
+
                 if (isWide) {
                     views.setTextViewText(R.id.tv_logged_status, "Tap again!")
                     views.setTextColor(R.id.tv_logged_status, COLOR_FEEDBACK)
+                    views.setTextViewText(R.id.tv_longest_streak, "Best: $longest days")
                 } else {
                     views.setTextViewText(R.id.tv_status, "Tap again!")
                     views.setTextColor(R.id.tv_status, COLOR_FEEDBACK)
                 }
+
+                val tapIntent = Intent(context, NotesStreakWidget::class.java).apply {
+                    action = ACTION_WIDGET_TAP
+                }
+                views.setOnClickPendingIntent(
+                    R.id.widget_root,
+                    PendingIntent.getBroadcast(context, 0, tapIntent,
+                        PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+                )
                 manager.updateAppWidget(id, views)
             }
-            // Small widget: flash streak number amber (no status text view)
+
             val smallIds = manager.getAppWidgetIds(ComponentName(context, NotesStreakWidgetSmall::class.java))
             for (id in smallIds) {
                 val views = RemoteViews(context.packageName, R.layout.widget_notes_streak_small)
+                views.setTextViewText(R.id.tv_streak_count_small, streak.toString())
                 views.setTextColor(R.id.tv_streak_count_small, COLOR_FEEDBACK)
+                val tapIntent = Intent(context, NotesStreakWidgetSmall::class.java).apply {
+                    action = ACTION_WIDGET_TAP
+                }
+                views.setOnClickPendingIntent(
+                    R.id.widget_root_small,
+                    PendingIntent.getBroadcast(context, 1, tapIntent,
+                        PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+                )
                 manager.updateAppWidget(id, views)
             }
         }
