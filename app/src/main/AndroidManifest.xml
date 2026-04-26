@@ -34,6 +34,16 @@
                 android:resource="@xml/notes_streak_widget_info_small" />
         </receiver>
 
+        <!-- Launcher entry point (widget-only app — just shows a hint) -->
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
         <!-- Confirmation dialog: opened on double-tap, never appears in recents -->
         <activity
             android:name=".LogConfirmationActivity"
