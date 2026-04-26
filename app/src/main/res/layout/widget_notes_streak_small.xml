@@ -1,55 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-    2×1 compact widget — one horizontal row.
-    Flame | streak number + DAY STREAK label stacked.
-    Place at: NoteWritingTracker/app/src/main/res/layout/widget_notes_streak_small.xml
--->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/widget_root_small"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal"
-    android:gravity="center"
-    android:paddingStart="12dp"
-    android:paddingEnd="12dp"
-    android:paddingTop="6dp"
-    android:paddingBottom="6dp"
-    android:background="@drawable/widget_background">
+    android:background="@drawable/widget_background_blue">
 
-    <TextView
-        android:id="@+id/tv_flame_small"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="🔥"
-        android:textSize="22sp"
-        android:layout_marginEnd="8dp"
-        android:includeFontPadding="false" />
+    <!-- Writing motif watermark -->
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/ic_writing_motif"
+        android:alpha="0.08"
+        android:scaleType="centerCrop"
+        android:contentDescription="@null" />
 
+    <!-- Content row -->
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center_horizontal">
+        android:layout_gravity="center"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
+        android:paddingTop="6dp"
+        android:paddingBottom="6dp">
 
         <TextView
-            android:id="@+id/tv_streak_count_small"
+            android:id="@+id/tv_flame_small"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="0"
-            android:textSize="28sp"
-            android:textStyle="bold"
-            android:fontFamily="sans-serif-condensed"
-            android:textColor="#FFFFFF"
+            android:text="🔥"
+            android:textSize="22sp"
+            android:layout_marginEnd="8dp"
             android:includeFontPadding="false" />
 
-        <TextView
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="DAY STREAK"
-            android:textSize="7sp"
-            android:textColor="#606080"
-            android:letterSpacing="0.12" />
+            android:orientation="vertical"
+            android:gravity="center_horizontal">
+
+            <TextView
+                android:id="@+id/tv_streak_count_small"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textSize="28sp"
+                android:textStyle="bold"
+                android:fontFamily="sans-serif-condensed"
+                android:textColor="#FFFFFF"
+                android:includeFontPadding="false" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="DAY STREAK"
+                android:textSize="7sp"
+                android:textColor="#606080"
+                android:letterSpacing="0.12" />
+
+        </LinearLayout>
 
     </LinearLayout>
 
-</LinearLayout>
+</FrameLayout>
