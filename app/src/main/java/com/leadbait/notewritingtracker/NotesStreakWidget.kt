@@ -51,9 +51,11 @@ class NotesStreakWidget : AppWidgetProvider() {
                 lastTapTime = 0L
                 uiHandler.removeCallbacksAndMessages(null)
                 refreshAllWidgets(context, manager) // restore normal colours first
+                val alreadyLogged = WidgetDataManager(context).isLoggedToday()
                 context.startActivity(
                     Intent(context, LogConfirmationActivity::class.java).apply {
                         flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                        putExtra(LogConfirmationActivity.EXTRA_ALREADY_LOGGED, alreadyLogged)
                     }
                 )
             } else {

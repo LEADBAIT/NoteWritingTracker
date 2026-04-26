@@ -1,35 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    Widget background: dark gradient base with a dimmed writing motif watermark.
+    Widget background: two-layer effect.
+    Layer 1 — very dark navy base (#0D0D1E) with rounded corners.
+    Layer 2 — soft radial amber glow centred near the bottom, 10% opacity,
+               mimicking embers beneath the flame. Purely gradient, no images.
     Place at: NoteWritingTracker/app/src/main/res/drawable/widget_background.xml
-
-    Layer order (bottom to top):
-      1. Dark gradient rectangle (the base, with rounded corners)
-      2. Writing motif vector at 12% opacity, anchored bottom-right
-    android:alpha on <item> requires API 23+; minSdk is 26, so this is safe.
 -->
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!-- 1. Base: dark gradient from deep navy to dark purple-black -->
     <item>
         <shape android:shape="rectangle">
-            <gradient
-                android:type="linear"
-                android:angle="135"
-                android:startColor="#1A1A2E"
-                android:endColor="#16213E" />
-            <corners android:radius="16dp" />
+            <solid android:color="#0D0D1E" />
+            <corners android:radius="18dp" />
         </shape>
     </item>
 
-    <!-- 2. Writing motif at 12% opacity, bottom-right, slightly cropped -->
-    <item
-        android:drawable="@drawable/ic_writing_motif"
-        android:gravity="bottom|end"
-        android:right="-12dp"
-        android:bottom="-12dp"
-        android:width="96dp"
-        android:height="96dp"
-        android:alpha="0.12" />
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:type="radial"
+                android:gradientRadius="130dp"
+                android:centerX="0.5"
+                android:centerY="0.88"
+                android:startColor="#1AFF8C00"
+                android:endColor="#00FF8C00" />
+            <corners android:radius="18dp" />
+        </shape>
+    </item>
 
 </layer-list>

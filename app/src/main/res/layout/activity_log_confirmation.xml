@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Place at: NoteWritingTracker/app/src/main/res/layout/activity_log_confirmation.xml
-     Full-screen translucent layout. The outer FrameLayout is the dim scrim;
-     the inner LinearLayout is the visible card. -->
+<!--
+    Confirmation dialog layout — supports two modes:
+      • Confirm mode:      icon=🔥  title=white   buttons: Yes + No  (Got it hidden)
+      • Already-logged:   icon=✅  title=green   button:  Got it     (Yes+No hidden)
+    Place at: NoteWritingTracker/app/src/main/res/layout/activity_log_confirmation.xml
+-->
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/dialog_scrim"
     android:layout_width="match_parent"
@@ -18,19 +21,21 @@
         android:padding="28dp"
         android:background="@drawable/dialog_background">
 
-        <!-- Flame -->
+        <!-- Icon (emoji): 🔥 or ✅ set programmatically -->
         <TextView
+            android:id="@+id/tv_dialog_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="🔥"
             android:textSize="52sp" />
 
-        <!-- Title -->
+        <!-- Title: changes text and color per mode -->
         <TextView
+            android:id="@+id/tv_dialog_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="14dp"
-            android:text="Did you write today?"
+            android:text=""
             android:textSize="19sp"
             android:textStyle="bold"
             android:textColor="#FFFFFF"
@@ -44,11 +49,12 @@
             android:layout_marginTop="6dp"
             android:text=""
             android:textSize="13sp"
-            android:textColor="#9E9E9E"
+            android:textColor="#606080"
             android:gravity="center" />
 
-        <!-- Buttons -->
+        <!-- Yes + No buttons (confirm mode) -->
         <LinearLayout
+            android:id="@+id/btn_row_confirm"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="28dp"
@@ -77,6 +83,18 @@
                 android:stateListAnimator="@null" />
 
         </LinearLayout>
+
+        <!-- Got it button (already-logged mode) -->
+        <Button
+            android:id="@+id/btn_got_it"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="28dp"
+            android:visibility="gone"
+            android:text="Got it  👍"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="#2D2D45"
+            android:stateListAnimator="@null" />
 
     </LinearLayout>
 
