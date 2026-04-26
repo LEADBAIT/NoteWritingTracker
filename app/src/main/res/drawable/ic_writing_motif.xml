@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Writing-themed background motif: an open notebook with ruled lines and a
+    fountain pen resting on it. Used as a dimmed watermark behind the widget text.
+    Place at: NoteWritingTracker/app/src/main/res/drawable/ic_writing_motif.xml
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="160dp"
+    android:height="160dp"
+    android:viewportWidth="160"
+    android:viewportHeight="160">
+
+    <!-- Open notebook: left page -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M20,30 L78,30 L78,130 L20,130 Z" />
+
+    <!-- Open notebook: right page -->
+    <path
+        android:fillColor="#F0F0F0"
+        android:pathData="M82,30 L140,30 L140,130 L82,130 Z" />
+
+    <!-- Spine / center crease -->
+    <path
+        android:strokeColor="#CCCCCC"
+        android:strokeWidth="3"
+        android:fillColor="#00000000"
+        android:pathData="M80,28 L80,132" />
+
+    <!-- Ruled lines on left page -->
+    <path
+        android:strokeColor="#CCCCCC"
+        android:strokeWidth="1.5"
+        android:fillColor="#00000000"
+        android:pathData="M28,50 L72,50" />
+    <path
+        android:strokeColor="#CCCCCC"
+        android:strokeWidth="1.5"
+        android:fillColor="#00000000"
+        android:pathData="M28,62 L72,62" />
+    <path
+        android:strokeColor="#CCCCCC"
+        android:strokeWidth="1.5"
+        android:fillColor="#00000000"
+        android:pathData="M28,74 L72,74" />
+    <path
+        android:strokeColor="#CCCCCC"
+        android:strokeWidth="1.5"
+        android:fillColor="#00000000"
+        android:pathData="M28,86 L72,86" />
+    <path
+        android:strokeColor="#CCCCCC"
+        android:strokeWidth="1.5"
+        android:fillColor="#00000000"
+        android:pathData="M28,98 L72,98" />
+    <path
+        android:strokeColor="#CCCCCC"
+        android:strokeWidth="1.5"
+        android:fillColor="#00000000"
+        android:pathData="M28,110 L72,110" />
+
+    <!-- Ruled lines on right page -->
+    <path
+        android:strokeColor="#CCCCCC"
+        android:strokeWidth="1.5"
+        android:fillColor="#00000000"
+        android:pathData="M88,50 L132,50" />
+    <path
+        android:strokeColor="#CCCCCC"
+        android:strokeWidth="1.5"
+        android:fillColor="#00000000"
+        android:pathData="M88,62 L132,62" />
+    <path
+        android:strokeColor="#CCCCCC"
+        android:strokeWidth="1.5"
+        android:fillColor="#00000000"
+        android:pathData="M88,74 L132,74" />
+    <path
+        android:strokeColor="#CCCCCC"
+        android:strokeWidth="1.5"
+        android:fillColor="#00000000"
+        android:pathData="M88,86 L132,86" />
+    <path
+        android:strokeColor="#CCCCCC"
+        android:strokeWidth="1.5"
+        android:fillColor="#00000000"
+        android:pathData="M88,98 L132,98" />
+
+    <!-- Notebook cover outline -->
+    <path
+        android:strokeColor="#AAAAAA"
+        android:strokeWidth="2"
+        android:fillColor="#00000000"
+        android:pathData="M20,30 L78,30 L82,30 L140,30 L140,130 L82,130 L78,130 L20,130 Z" />
+
+    <!-- Fountain pen body (diagonal, bottom-right area) -->
+    <path
+        android:fillColor="#B0B0C8"
+        android:pathData="M125,95 L145,75 L148,78 L128,98 Z" />
+
+    <!-- Pen cap -->
+    <path
+        android:fillColor="#8080A0"
+        android:pathData="M143,73 L150,68 L152,72 L145,77 Z" />
+
+    <!-- Pen nib -->
+    <path
+        android:fillColor="#D4AF37"
+        android:pathData="M125,95 L128,98 L118,110 Z" />
+
+    <!-- Pen clip -->
+    <path
+        android:strokeColor="#9090B0"
+        android:strokeWidth="1.5"
+        android:fillColor="#00000000"
+        android:pathData="M144,76 L146,74 L149,77 L147,79" />
+
+</vector>

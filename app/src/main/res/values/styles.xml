@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Place at: NoteWritingTracker/app/src/main/res/values/styles.xml -->
+<resources>
+    <!--
+        Translucent fullscreen theme for LogConfirmationActivity.
+        The activity draws its own dim scrim in the layout so the home screen
+        shows through, giving a native dialog feel without using AlertDialog.
+    -->
+    <style name="ConfirmDialogTheme" parent="android:Theme.Material.NoActionBar">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:backgroundDimEnabled">false</item>
+        <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+    </style>
+</resources>

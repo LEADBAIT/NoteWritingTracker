@@ -7,21 +7,14 @@
         android:label="@string/app_name"
         android:supportsRtl="true">
 
-        <!--
-            Single AppWidgetProvider that handles both 2x2 and 4x2 sizes.
-            The widget switches layouts automatically when the user resizes it
-            on the home screen (handled in onAppWidgetOptionsChanged).
-
-            The LOG_TODAY action is registered here so the widget can receive
-            its own tap broadcasts without needing a separate Service or Activity.
-        -->
-        <!-- Resizable widget: starts at 2×2, can be widened to 4×2 -->
+        <!-- Resizable widget: starts at 2×2, can be widened to 4×2.
+             WIDGET_TAP triggers double-tap detection inside the receiver. -->
         <receiver
             android:name=".NotesStreakWidget"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-                <action android:name="com.leadbait.notewritingtracker.LOG_TODAY" />
+                <action android:name="com.leadbait.notewritingtracker.WIDGET_TAP" />
             </intent-filter>
             <meta-data
                 android:name="android.appwidget.provider"
@@ -34,12 +27,20 @@
             android:exported="true">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-                <action android:name="com.leadbait.notewritingtracker.LOG_TODAY" />
+                <action android:name="com.leadbait.notewritingtracker.WIDGET_TAP" />
             </intent-filter>
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/notes_streak_widget_info_small" />
         </receiver>
+
+        <!-- Confirmation dialog: opened on double-tap, never appears in recents -->
+        <activity
+            android:name=".LogConfirmationActivity"
+            android:theme="@style/ConfirmDialogTheme"
+            android:exported="false"
+            android:excludeFromRecents="true"
+            android:taskAffinity="" />
 
     </application>
 

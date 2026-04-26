@@ -1,10 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Place at: NoteWritingTracker/app/src/main/res/drawable/widget_background.xml
-     Dark rounded rectangle used as the widget background.
-     On Android 12+ (API 31+) the system clips all widgets to rounded corners
-     automatically; the corners here ensure the same look on older devices. -->
-<shape xmlns:android="http://schemas.android.com/apk/res/android"
-    android:shape="rectangle">
-    <solid android:color="#1A1A2E" />
-    <corners android:radius="16dp" />
-</shape>
+<!--
+    Widget background: dark gradient base with a dimmed writing motif watermark.
+    Place at: NoteWritingTracker/app/src/main/res/drawable/widget_background.xml
+
+    Layer order (bottom to top):
+      1. Dark gradient rectangle (the base, with rounded corners)
+      2. Writing motif vector at 12% opacity, anchored bottom-right
+    android:alpha on <item> requires API 23+; minSdk is 26, so this is safe.
+-->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- 1. Base: dark gradient from deep navy to dark purple-black -->
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:type="linear"
+                android:angle="135"
+                android:startColor="#1A1A2E"
+                android:endColor="#16213E" />
+            <corners android:radius="16dp" />
+        </shape>
+    </item>
+
+    <!-- 2. Writing motif at 12% opacity, bottom-right, slightly cropped -->
+    <item
+        android:drawable="@drawable/ic_writing_motif"
+        android:gravity="bottom|end"
+        android:right="-12dp"
+        android:bottom="-12dp"
+        android:width="96dp"
+        android:height="96dp"
+        android:alpha="0.12" />
+
+</layer-list>
