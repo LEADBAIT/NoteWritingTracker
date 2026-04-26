@@ -58,7 +58,7 @@
         android:layout_marginEnd="8dp"
         android:background="#3A3A5C" />
 
-    <!-- RIGHT: date, log status, best streak -->
+    <!-- RIGHT: log status + best streak (no date) -->
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
@@ -67,23 +67,13 @@
         android:gravity="center_vertical"
         android:paddingStart="4dp">
 
-        <!-- e.g. "Sat, Apr 25" -->
-        <TextView
-            android:id="@+id/tv_date"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text=""
-            android:textSize="12sp"
-            android:textColor="#B0B0B0" />
-
         <!-- "✓ Logged" or "Tap to log" — color set programmatically -->
         <TextView
             android:id="@+id/tv_logged_status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
             android:text=""
-            android:textSize="17sp"
+            android:textSize="18sp"
             android:textStyle="bold"
             android:textColor="#9E9E9E" />
 
@@ -94,7 +84,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:text=""
-            android:textSize="11sp"
+            android:textSize="12sp"
             android:textColor="#7A7A9A" />
 
     </LinearLayout>

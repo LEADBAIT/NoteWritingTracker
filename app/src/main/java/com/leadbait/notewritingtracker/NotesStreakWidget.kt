@@ -43,7 +43,6 @@ class NotesStreakWidget : AppWidgetProvider() {
             val isLogged = data.isLoggedToday()
             val streak = data.getCurrentStreak()
             val longest = data.getLongestStreak()
-            val todayStr = data.getTodayFormatted()
 
             val options = manager.getAppWidgetOptions(widgetId)
             val minWidth = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH, 0)
@@ -63,12 +62,11 @@ class NotesStreakWidget : AppWidgetProvider() {
 
             // Layout-specific views (IDs differ between 2×2 and 4×2):
             if (isWide) {
-                views.setTextViewText(R.id.tv_date, todayStr)
                 views.setTextViewText(R.id.tv_logged_status, statusText)
                 views.setTextColor(R.id.tv_logged_status, accentColor)
                 views.setTextViewText(R.id.tv_longest_streak, "Best: $longest days")
             } else {
-                views.setTextViewText(R.id.tv_status, "$todayStr  $statusText")
+                views.setTextViewText(R.id.tv_status, statusText)
                 views.setTextColor(R.id.tv_status, accentColor)
             }
 

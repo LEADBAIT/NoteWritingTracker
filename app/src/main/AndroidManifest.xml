@@ -15,6 +15,7 @@
             The LOG_TODAY action is registered here so the widget can receive
             its own tap broadcasts without needing a separate Service or Activity.
         -->
+        <!-- Resizable widget: starts at 2×2, can be widened to 4×2 -->
         <receiver
             android:name=".NotesStreakWidget"
             android:exported="true">
@@ -25,6 +26,19 @@
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/notes_streak_widget_info" />
+        </receiver>
+
+        <!-- Compact 2×1 widget: width of two app icons, one row tall -->
+        <receiver
+            android:name=".NotesStreakWidgetSmall"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="com.leadbait.notewritingtracker.LOG_TODAY" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/notes_streak_widget_info_small" />
         </receiver>
 
     </application>
