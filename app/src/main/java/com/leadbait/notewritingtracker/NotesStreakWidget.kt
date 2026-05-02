@@ -13,6 +13,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.widget.RemoteViews
+import java.util.Calendar
 
 /**
  * AppWidgetProvider for the resizable Notes Streak widget (2×2 / 4×2).
@@ -34,8 +35,27 @@ class NotesStreakWidget : AppWidgetProvider() {
         private const val WIDE_LAYOUT_THRESHOLD_DP = 200
 
         private val COLOR_LOGGED   = Color.parseColor("#4CAF50")
-        private val COLOR_PENDING  = Color.parseColor("#9E9E9E")
         private val COLOR_FEEDBACK = Color.parseColor("#FF9800") // amber on first tap
+
+        // Urgency colors for pending state — progress through the day as a visual rush cue.
+        // Dark background means "black" would be invisible, so the final stage uses alarm red.
+        private val COLOR_PENDING_BLUE   = Color.parseColor("#64B5F6") // 00:00–05:59
+        private val COLOR_PENDING_GREEN  = Color.parseColor("#81C784") // 06:00–11:59
+        private val COLOR_PENDING_ORANGE = Color.parseColor("#FFB74D") // 12:00–17:59
+        private val COLOR_PENDING_PINK   = Color.parseColor("#F48FB1") // 18:00–20:59
+        private val COLOR_PENDING_RED    = Color.parseColor("#FF1744") // 21:00–23:59
+
+        /** Returns the urgency color for an unlogged streak based on current hour. */
+        fun getPendingColor(): Int {
+            val hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
+            return when {
+                hour < 6  -> COLOR_PENDING_BLUE
+                hour < 12 -> COLOR_PENDING_GREEN
+                hour < 18 -> COLOR_PENDING_ORANGE
+                hour < 21 -> COLOR_PENDING_PINK
+                else      -> COLOR_PENDING_RED
+            }
+        }
 
         // Shared across both widget classes — same process, same static field.
         @Volatile internal var lastTapTime = 0L
@@ -75,7 +95,7 @@ class NotesStreakWidget : AppWidgetProvider() {
             val streak  = data.getCurrentStreak()
             val longest = data.getLongestStreak()
             val isLogged = data.isLoggedToday()
-            val accentColor = if (isLogged) COLOR_LOGGED else COLOR_PENDING
+            val accentColor = if (isLogged) COLOR_LOGGED else getPendingColor()
 
             val ids = manager.getAppWidgetIds(ComponentName(context, NotesStreakWidget::class.java))
             for (id in ids) {
@@ -148,7 +168,7 @@ class NotesStreakWidget : AppWidgetProvider() {
                             else        R.layout.widget_notes_streak_2x2
             val views = RemoteViews(context.packageName, layoutRes)
 
-            val accentColor = if (isLogged) COLOR_LOGGED else COLOR_PENDING
+            val accentColor = if (isLogged) COLOR_LOGGED else getPendingColor()
             val statusText  = if (isLogged) "✓ Logged" else "Tap twice to log"
             val flameAlpha  = if (isLogged) 1.0f else 0.30f
             val bgRes       = if (isLogged) R.drawable.widget_background
