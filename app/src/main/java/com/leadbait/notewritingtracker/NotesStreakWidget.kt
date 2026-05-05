@@ -69,6 +69,19 @@ class NotesStreakWidget : AppWidgetProvider() {
             }
         }
 
+        /** Returns urgency-aware status text for the pending state. */
+        private fun getPendingStatus(): String {
+            val hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
+            return when {
+                hour < 12 -> "Tap twice to log"
+                hour < 18 -> "Don't forget to log!"
+                hour < 21 -> "Log before tonight ends!"
+                else      -> "Almost midnight — log now!"
+            }
+        }
+
+        private fun longestStreakLabel(n: Int) = "Best: $n ${if (n == 1) "day" else "days"}"
+
         // Shared across both widget classes — same process, same static field.
         @Volatile internal var lastTapTime = 0L
         private val uiHandler = Handler(Looper.getMainLooper())
@@ -125,7 +138,7 @@ class NotesStreakWidget : AppWidgetProvider() {
                 if (isWide) {
                     views.setTextViewText(R.id.tv_logged_status, "Tap again!")
                     views.setTextColor(R.id.tv_logged_status, COLOR_FEEDBACK)
-                    views.setTextViewText(R.id.tv_longest_streak, "Best: $longest days")
+                    views.setTextViewText(R.id.tv_longest_streak, longestStreakLabel(longest))
                 } else {
                     views.setTextViewText(R.id.tv_status, "Tap again!")
                     views.setTextColor(R.id.tv_status, COLOR_FEEDBACK)
@@ -181,7 +194,7 @@ class NotesStreakWidget : AppWidgetProvider() {
             val views = RemoteViews(context.packageName, layoutRes)
 
             val accentColor = if (isLogged) COLOR_LOGGED else getPendingColor()
-            val statusText  = if (isLogged) "✓ Logged" else "Tap twice to log"
+            val statusText  = if (isLogged) "✓ Logged" else getPendingStatus()
             val flameAlpha  = if (isLogged) 1.0f else 0.30f
             val bgRes       = if (isLogged) R.drawable.widget_background
                               else          getPendingBackground()
@@ -197,7 +210,7 @@ class NotesStreakWidget : AppWidgetProvider() {
             if (isWide) {
                 views.setTextViewText(R.id.tv_logged_status, statusText)
                 views.setTextColor(R.id.tv_logged_status, accentColor)
-                views.setTextViewText(R.id.tv_longest_streak, "Best: $longest days")
+                views.setTextViewText(R.id.tv_longest_streak, longestStreakLabel(longest))
             } else {
                 views.setTextViewText(R.id.tv_status, statusText)
                 views.setTextColor(R.id.tv_status, accentColor)

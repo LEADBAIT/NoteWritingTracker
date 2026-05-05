@@ -51,11 +51,12 @@ class WidgetDataManager(context: Context) {
     fun logToday() {
         if (isLoggedToday()) return
         val dates = loggedDates().also { it.add(todayKey()) }
-        prefs.edit().putStringSet(KEY_LOGGED_DATES, dates).apply()
         val streak = computeStreak(dates)
-        if (streak > getLongestStreak()) {
-            prefs.edit().putInt(KEY_LONGEST_STREAK, streak).apply()
-        }
+        val longest = if (streak > getLongestStreak()) streak else getLongestStreak()
+        prefs.edit()
+            .putStringSet(KEY_LOGGED_DATES, dates)
+            .putInt(KEY_LONGEST_STREAK, longest)
+            .apply()
     }
 
     fun getCurrentStreak(): Int = computeStreak(loggedDates())

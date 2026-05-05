@@ -50,20 +50,15 @@ class LogConfirmationActivity : Activity() {
             setTextColor(android.graphics.Color.WHITE)
         }
 
-        val btnYes = findViewById<Button>(R.id.btn_yes)
-        val btnNo  = findViewById<Button>(R.id.btn_no)
-        val btnGotIt = findViewById<Button>(R.id.btn_got_it)
+        findViewById<View>(R.id.btn_row_confirm).visibility = View.VISIBLE
+        findViewById<Button>(R.id.btn_got_it).visibility = View.GONE
 
-        btnYes.visibility = View.VISIBLE
-        btnNo.visibility  = View.VISIBLE
-        btnGotIt.visibility = View.GONE
-
-        btnYes.setOnClickListener {
+        findViewById<Button>(R.id.btn_yes).setOnClickListener {
             data.logToday()
             refreshAllWidgets()
             finish()
         }
-        btnNo.setOnClickListener { finish() }
+        findViewById<Button>(R.id.btn_no).setOnClickListener { finish() }
     }
 
     private fun showAlreadyLoggedMode() {
@@ -73,15 +68,10 @@ class LogConfirmationActivity : Activity() {
             setTextColor(android.graphics.Color.parseColor("#4CAF50"))
         }
 
-        val btnYes = findViewById<Button>(R.id.btn_yes)
-        val btnNo  = findViewById<Button>(R.id.btn_no)
-        val btnGotIt = findViewById<Button>(R.id.btn_got_it)
+        findViewById<View>(R.id.btn_row_confirm).visibility = View.GONE
+        findViewById<Button>(R.id.btn_got_it).visibility = View.VISIBLE
 
-        btnYes.visibility  = View.GONE
-        btnNo.visibility   = View.GONE
-        btnGotIt.visibility = View.VISIBLE
-
-        btnGotIt.setOnClickListener { finish() }
+        findViewById<Button>(R.id.btn_got_it).setOnClickListener { finish() }
     }
 
     private fun refreshAllWidgets() {
