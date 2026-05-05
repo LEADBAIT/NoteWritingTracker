@@ -45,7 +45,7 @@ class NotesStreakWidget : AppWidgetProvider() {
         private val COLOR_PENDING_PINK   = Color.parseColor("#F48FB1") // 18:00–20:59
         private val COLOR_PENDING_RED    = Color.parseColor("#FF1744") // 21:00–23:59
 
-        /** Returns the urgency color for an unlogged streak based on current hour. */
+        /** Returns the urgency accent color for an unlogged streak based on current hour. */
         fun getPendingColor(): Int {
             val hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
             return when {
@@ -54,6 +54,18 @@ class NotesStreakWidget : AppWidgetProvider() {
                 hour < 18 -> COLOR_PENDING_ORANGE
                 hour < 21 -> COLOR_PENDING_PINK
                 else      -> COLOR_PENDING_RED
+            }
+        }
+
+        /** Returns the urgency background drawable for an unlogged streak based on current hour. */
+        fun getPendingBackground(): Int {
+            val hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
+            return when {
+                hour < 6  -> R.drawable.widget_background_pending_blue
+                hour < 12 -> R.drawable.widget_background_pending_green
+                hour < 18 -> R.drawable.widget_background_pending_orange
+                hour < 21 -> R.drawable.widget_background_pending_pink
+                else      -> R.drawable.widget_background_pending_red
             }
         }
 
@@ -172,7 +184,7 @@ class NotesStreakWidget : AppWidgetProvider() {
             val statusText  = if (isLogged) "✓ Logged" else "Tap twice to log"
             val flameAlpha  = if (isLogged) 1.0f else 0.30f
             val bgRes       = if (isLogged) R.drawable.widget_background
-                              else          R.drawable.widget_background_pending
+                              else          getPendingBackground()
 
             // Switch background between warm (logged) and cold (pending)
             views.setInt(R.id.widget_root, "setBackgroundResource", bgRes)
