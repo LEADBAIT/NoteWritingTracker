@@ -232,6 +232,15 @@ class NotesStreakWidget : AppWidgetProvider() {
         context: Context, appWidgetManager: AppWidgetManager, appWidgetIds: IntArray
     ) {
         appWidgetIds.forEach { updateWidget(context, appWidgetManager, it) }
+        ReminderReceiver.schedule(context)
+    }
+
+    override fun onEnabled(context: Context) {
+        ReminderReceiver.schedule(context)
+    }
+
+    override fun onDisabled(context: Context) {
+        ReminderReceiver.cancel(context)
     }
 
     override fun onAppWidgetOptionsChanged(
@@ -243,8 +252,9 @@ class NotesStreakWidget : AppWidgetProvider() {
 
     override fun onReceive(context: Context, intent: Intent) {
         super.onReceive(context, intent)
-        if (intent.action == ACTION_WIDGET_TAP) {
-            handleTap(context, AppWidgetManager.getInstance(context))
+        when (intent.action) {
+            ACTION_WIDGET_TAP            -> handleTap(context, AppWidgetManager.getInstance(context))
+            Intent.ACTION_BOOT_COMPLETED -> ReminderReceiver.schedule(context)
         }
     }
 }

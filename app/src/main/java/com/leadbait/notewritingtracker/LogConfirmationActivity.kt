@@ -5,6 +5,8 @@ package com.leadbait.notewritingtracker
 import android.app.Activity
 import android.appwidget.AppWidgetManager
 import android.content.ComponentName
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
@@ -29,6 +31,8 @@ class LogConfirmationActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_log_confirmation)
+
+        requestNotificationPermissionIfNeeded()
 
         val alreadyLogged = intent.getBooleanExtra(EXTRA_ALREADY_LOGGED, false)
         val data = WidgetDataManager(this)
@@ -55,6 +59,7 @@ class LogConfirmationActivity : Activity() {
 
         findViewById<Button>(R.id.btn_yes).setOnClickListener {
             data.logToday()
+            ReminderReceiver.cancel(this)
             refreshAllWidgets()
             finish()
         }
@@ -72,6 +77,15 @@ class LogConfirmationActivity : Activity() {
         findViewById<Button>(R.id.btn_got_it).visibility = View.VISIBLE
 
         findViewById<Button>(R.id.btn_got_it).setOnClickListener { finish() }
+    }
+
+    private fun requestNotificationPermissionIfNeeded() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (checkSelfPermission(android.Manifest.permission.POST_NOTIFICATIONS)
+                    != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(arrayOf(android.Manifest.permission.POST_NOTIFICATIONS), 0)
+            }
+        }
     }
 
     private fun refreshAllWidgets() {
