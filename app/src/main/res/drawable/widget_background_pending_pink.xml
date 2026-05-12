@@ -1,30 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <!-- Dark rose-tinted base -->
     <item>
         <shape android:shape="rectangle">
-            <solid android:color="#1A0D12" />
+            <solid android:color="#1A0A10" />
             <corners android:radius="18dp" />
         </shape>
     </item>
 
-    <!-- Pink glow — evening, getting urgent (18:00–20:59) -->
+    <!-- Strong pink radial glow — evening, getting urgent (18:00–20:59) -->
     <item>
         <shape android:shape="rectangle">
             <gradient
                 android:type="radial"
-                android:gradientRadius="110dp"
+                android:gradientRadius="120dp"
                 android:centerX="0.5"
                 android:centerY="0.4"
-                android:startColor="#26E91E63"
-                android:endColor="#00E91E63" />
+                android:startColor="#80AD1457"
+                android:endColor="#00AD1457" />
             <corners android:radius="18dp" />
         </shape>
     </item>
 
+    <!-- Clearly visible pink border ring -->
     <item android:top="0dp" android:bottom="0dp" android:left="0dp" android:right="0dp">
         <shape android:shape="rectangle">
-            <stroke android:width="1dp" android:color="#4A1E3A" />
+            <stroke android:width="2dp" android:color="#AD1457" />
             <corners android:radius="18dp" />
             <solid android:color="#00000000" />
         </shape>
