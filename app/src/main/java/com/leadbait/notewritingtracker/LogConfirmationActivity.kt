@@ -96,14 +96,15 @@ class LogConfirmationActivity : Activity() {
 
         // Manufacturer and popular fallbacks, tried in order
         val candidates = listOf(
-            "com.samsung.android.app.notes",  // Samsung Notes (Android 9+)
-            "com.samsung.android.note",        // Samsung Notes (older)
-            "com.google.android.keep",          // Google Keep
-            "com.miui.notes",                   // Xiaomi / MIUI Notes
-            "com.huawei.notepad",               // Huawei Notes
-            "com.oneplus.note",                 // OnePlus Notes
-            "com.oppo.notes",                   // OPPO Notes
-            "com.colornote.notepad"             // ColorNote (popular 3rd-party)
+            "com.standardnotes",               // Standard Notes
+            "com.samsung.android.app.notes",   // Samsung Notes (Android 9+)
+            "com.samsung.android.note",         // Samsung Notes (older)
+            "com.google.android.keep",           // Google Keep
+            "com.miui.notes",                    // Xiaomi / MIUI Notes
+            "com.huawei.notepad",                // Huawei Notes
+            "com.oneplus.note",                  // OnePlus Notes
+            "com.oppo.notes",                    // OPPO Notes
+            "com.colornote.notepad"              // ColorNote (popular 3rd-party)
         )
         for (pkg in candidates) {
             val launch = packageManager.getLaunchIntentForPackage(pkg) ?: continue
