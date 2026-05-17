@@ -85,6 +85,14 @@ class LogConfirmationActivity : Activity() {
 
     private fun openNotesApp() {
         val pkg = "com.standardnotes"
+
+        // Try 1: getLaunchIntentForPackage
+        packageManager.getLaunchIntentForPackage(pkg)?.let {
+            it.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            try { startActivity(it); return } catch (_: Exception) {}
+        }
+
+        // Try 2: explicit ACTION_MAIN + CATEGORY_LAUNCHER
         try {
             startActivity(Intent(Intent.ACTION_MAIN).apply {
                 setPackage(pkg)
@@ -93,6 +101,27 @@ class LogConfirmationActivity : Activity() {
             })
             return
         } catch (_: Exception) { }
+
+        // Try 3: queryIntentActivities to find the real launch activity
+        val probe = Intent(Intent.ACTION_MAIN).apply {
+            addCategory(Intent.CATEGORY_LAUNCHER)
+            setPackage(pkg)
+        }
+        val resolved = packageManager.queryIntentActivities(probe, 0)
+        if (resolved.isNotEmpty()) {
+            val ai = resolved[0].activityInfo
+            try {
+                startActivity(Intent(Intent.ACTION_MAIN).apply {
+                    component = android.content.ComponentName(ai.packageName, ai.name)
+                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                })
+                return
+            } catch (_: Exception) { }
+        }
+
+        android.widget.Toast.makeText(
+            this, "Standard Notes not found — opening Play Store", android.widget.Toast.LENGTH_LONG
+        ).show()
 
         // Play Store fallback
         try {
