@@ -9,6 +9,21 @@
     <!-- Reschedule reminders after device reboot -->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
+    <!-- Android 11+ package visibility: declare apps we may launch via No button -->
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.CREATE_NOTE" />
+        </intent>
+        <package android:name="com.samsung.android.app.notes" />
+        <package android:name="com.samsung.android.note" />
+        <package android:name="com.google.android.keep" />
+        <package android:name="com.miui.notes" />
+        <package android:name="com.huawei.notepad" />
+        <package android:name="com.oneplus.note" />
+        <package android:name="com.oppo.notes" />
+        <package android:name="com.colornote.notepad" />
+    </queries>
+
     <application
         android:allowBackup="true"
         android:label="@string/app_name"

@@ -5,6 +5,7 @@ package com.leadbait.notewritingtracker
 import android.app.Activity
 import android.appwidget.AppWidgetManager
 import android.content.ComponentName
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
@@ -63,7 +64,10 @@ class LogConfirmationActivity : Activity() {
             refreshAllWidgets()
             finish()
         }
-        findViewById<Button>(R.id.btn_no).setOnClickListener { finish() }
+        findViewById<Button>(R.id.btn_no).setOnClickListener {
+            openNotesApp()
+            finish()
+        }
     }
 
     private fun showAlreadyLoggedMode() {
@@ -77,6 +81,40 @@ class LogConfirmationActivity : Activity() {
         findViewById<Button>(R.id.btn_got_it).visibility = View.VISIBLE
 
         findViewById<Button>(R.id.btn_got_it).setOnClickListener { finish() }
+    }
+
+    /**
+     * Opens the device's notes app. Strategy:
+     *  1. Standard CREATE_NOTE intent — handled by Samsung Notes, Google Keep, etc.
+     *  2. Fallback: launch known manufacturer/popular note apps by package name.
+     * Silently does nothing if no notes app is found (just closes the dialog).
+     */
+    private fun openNotesApp() {
+        // Standard intent — the preferred approach
+        if (tryStart(Intent("android.intent.action.CREATE_NOTE")
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))) return
+
+        // Manufacturer and popular fallbacks, tried in order
+        val candidates = listOf(
+            "com.samsung.android.app.notes",  // Samsung Notes (Android 9+)
+            "com.samsung.android.note",        // Samsung Notes (older)
+            "com.google.android.keep",          // Google Keep
+            "com.miui.notes",                   // Xiaomi / MIUI Notes
+            "com.huawei.notepad",               // Huawei Notes
+            "com.oneplus.note",                 // OnePlus Notes
+            "com.oppo.notes",                   // OPPO Notes
+            "com.colornote.notepad"             // ColorNote (popular 3rd-party)
+        )
+        for (pkg in candidates) {
+            val launch = packageManager.getLaunchIntentForPackage(pkg) ?: continue
+            if (tryStart(launch.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))) return
+        }
+    }
+
+    private fun tryStart(intent: Intent): Boolean = try {
+        startActivity(intent); true
+    } catch (_: Exception) {
+        false
     }
 
     private fun requestNotificationPermissionIfNeeded() {
