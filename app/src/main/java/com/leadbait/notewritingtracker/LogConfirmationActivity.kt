@@ -84,39 +84,33 @@ class LogConfirmationActivity : Activity() {
     }
 
     private fun openNotesApp() {
-        // 1. Standard Notes by package name — most direct, tried first
-        packageManager.getLaunchIntentForPackage("com.standardnotes")
-            ?.let { if (tryStart(it)) return }
-
-        // 2. Generic CREATE_NOTE intent (Samsung Notes, Google Keep, etc.)
-        if (tryStart(Intent("android.intent.action.CREATE_NOTE")
-                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))) return
-
-        // 3. Other known note apps
-        val others = listOf(
-            "com.samsung.android.app.notes",
-            "com.samsung.android.note",
-            "com.google.android.keep",
-            "com.miui.notes",
-            "com.huawei.notepad",
-            "com.oneplus.note",
-            "com.oppo.notes",
-            "com.colornote.notepad"
-        )
-        for (pkg in others) {
-            packageManager.getLaunchIntentForPackage(pkg)
-                ?.let { if (tryStart(it)) return }
+        val pkg = "com.standardnotes"
+        val intent = packageManager.getLaunchIntentForPackage(pkg)
+        if (intent != null) {
+            try {
+                startActivity(intent)
+                return
+            } catch (e: Exception) {
+                android.widget.Toast.makeText(this, "Found app but failed to open: ${e.message}", android.widget.Toast.LENGTH_LONG).show()
+            }
+        } else {
+            android.widget.Toast.makeText(this, "Standard Notes package not found — trying Play Store", android.widget.Toast.LENGTH_LONG).show()
         }
 
-        // 4. Play Store page for Standard Notes (market:// URI)
-        if (tryStart(Intent(Intent.ACTION_VIEW,
-                android.net.Uri.parse("market://details?id=com.standardnotes"))
-                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))) return
-
-        // 5. Browser fallback if Play Store app is not present
-        tryStart(Intent(Intent.ACTION_VIEW,
-            android.net.Uri.parse("https://play.google.com/store/apps/details?id=com.standardnotes"))
-            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+        // Play Store fallback
+        try {
+            startActivity(Intent(Intent.ACTION_VIEW,
+                android.net.Uri.parse("market://details?id=$pkg"))
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+        } catch (e: Exception) {
+            try {
+                startActivity(Intent(Intent.ACTION_VIEW,
+                    android.net.Uri.parse("https://play.google.com/store/apps/details?id=$pkg"))
+                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+            } catch (e2: Exception) {
+                android.widget.Toast.makeText(this, "Could not open Play Store either", android.widget.Toast.LENGTH_LONG).show()
+            }
+        }
     }
 
     private fun tryStart(intent: Intent): Boolean = try {
