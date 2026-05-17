@@ -85,38 +85,27 @@ class LogConfirmationActivity : Activity() {
 
     private fun openNotesApp() {
         val pkg = "com.standardnotes"
-        val intent = packageManager.getLaunchIntentForPackage(pkg)
-        if (intent != null) {
-            try {
-                startActivity(intent)
-                return
-            } catch (e: Exception) {
-                android.widget.Toast.makeText(this, "Found app but failed to open: ${e.message}", android.widget.Toast.LENGTH_LONG).show()
-            }
-        } else {
-            android.widget.Toast.makeText(this, "Standard Notes package not found — trying Play Store", android.widget.Toast.LENGTH_LONG).show()
-        }
+        try {
+            startActivity(Intent(Intent.ACTION_MAIN).apply {
+                setPackage(pkg)
+                addCategory(Intent.CATEGORY_LAUNCHER)
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            })
+            return
+        } catch (_: Exception) { }
 
         // Play Store fallback
         try {
             startActivity(Intent(Intent.ACTION_VIEW,
                 android.net.Uri.parse("market://details?id=$pkg"))
                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             try {
                 startActivity(Intent(Intent.ACTION_VIEW,
                     android.net.Uri.parse("https://play.google.com/store/apps/details?id=$pkg"))
                     .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
-            } catch (e2: Exception) {
-                android.widget.Toast.makeText(this, "Could not open Play Store either", android.widget.Toast.LENGTH_LONG).show()
-            }
+            } catch (_: Exception) { }
         }
-    }
-
-    private fun tryStart(intent: Intent): Boolean = try {
-        startActivity(intent); true
-    } catch (_: Exception) {
-        false
     }
 
     private fun requestNotificationPermissionIfNeeded() {
