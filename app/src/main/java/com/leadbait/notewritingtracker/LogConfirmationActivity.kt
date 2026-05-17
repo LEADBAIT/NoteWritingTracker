@@ -83,39 +83,37 @@ class LogConfirmationActivity : Activity() {
         findViewById<Button>(R.id.btn_got_it).setOnClickListener { finish() }
     }
 
-    /**
-     * Opens the device's notes app. Strategy:
-     *  1. Standard CREATE_NOTE intent — handled by Samsung Notes, Google Keep, etc.
-     *  2. Fallback: launch known manufacturer/popular note apps by package name.
-     * Silently does nothing if no notes app is found (just closes the dialog).
-     */
     private fun openNotesApp() {
-        // Standard intent — the preferred approach
+        // 1. Standard Notes by package name — most direct, tried first
+        packageManager.getLaunchIntentForPackage("com.standardnotes")
+            ?.let { if (tryStart(it)) return }
+
+        // 2. Generic CREATE_NOTE intent (Samsung Notes, Google Keep, etc.)
         if (tryStart(Intent("android.intent.action.CREATE_NOTE")
                 .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))) return
 
-        // Manufacturer and popular fallbacks, tried in order
-        val candidates = listOf(
-            "com.standardnotes",               // Standard Notes
-            "com.samsung.android.app.notes",   // Samsung Notes (Android 9+)
-            "com.samsung.android.note",         // Samsung Notes (older)
-            "com.google.android.keep",           // Google Keep
-            "com.miui.notes",                    // Xiaomi / MIUI Notes
-            "com.huawei.notepad",                // Huawei Notes
-            "com.oneplus.note",                  // OnePlus Notes
-            "com.oppo.notes",                    // OPPO Notes
-            "com.colornote.notepad"              // ColorNote (popular 3rd-party)
+        // 3. Other known note apps
+        val others = listOf(
+            "com.samsung.android.app.notes",
+            "com.samsung.android.note",
+            "com.google.android.keep",
+            "com.miui.notes",
+            "com.huawei.notepad",
+            "com.oneplus.note",
+            "com.oppo.notes",
+            "com.colornote.notepad"
         )
-        for (pkg in candidates) {
-            val launch = packageManager.getLaunchIntentForPackage(pkg) ?: continue
-            if (tryStart(launch.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))) return
+        for (pkg in others) {
+            packageManager.getLaunchIntentForPackage(pkg)
+                ?.let { if (tryStart(it)) return }
         }
 
-        // Last resort: open Standard Notes on the Play Store so the user can install it
-        tryStart(Intent(Intent.ACTION_VIEW,
-            android.net.Uri.parse("market://details?id=com.standardnotes"))
-            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
-        // If Play Store itself isn't installed, fall back to the browser
+        // 4. Play Store page for Standard Notes (market:// URI)
+        if (tryStart(Intent(Intent.ACTION_VIEW,
+                android.net.Uri.parse("market://details?id=com.standardnotes"))
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))) return
+
+        // 5. Browser fallback if Play Store app is not present
         tryStart(Intent(Intent.ACTION_VIEW,
             android.net.Uri.parse("https://play.google.com/store/apps/details?id=com.standardnotes"))
             .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
