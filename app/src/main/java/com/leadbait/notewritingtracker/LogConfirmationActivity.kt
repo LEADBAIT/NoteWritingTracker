@@ -110,6 +110,15 @@ class LogConfirmationActivity : Activity() {
             val launch = packageManager.getLaunchIntentForPackage(pkg) ?: continue
             if (tryStart(launch.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))) return
         }
+
+        // Last resort: open Standard Notes on the Play Store so the user can install it
+        tryStart(Intent(Intent.ACTION_VIEW,
+            android.net.Uri.parse("market://details?id=com.standardnotes"))
+            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+        // If Play Store itself isn't installed, fall back to the browser
+        tryStart(Intent(Intent.ACTION_VIEW,
+            android.net.Uri.parse("https://play.google.com/store/apps/details?id=com.standardnotes"))
+            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
     }
 
     private fun tryStart(intent: Intent): Boolean = try {
