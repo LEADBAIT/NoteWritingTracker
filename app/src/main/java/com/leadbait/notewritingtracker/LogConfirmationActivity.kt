@@ -8,6 +8,7 @@ import android.content.ComponentName
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
+import android.util.Log
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
@@ -85,22 +86,35 @@ class LogConfirmationActivity : Activity() {
 
     private fun openNotesApp() {
         val pkg = "com.standardnotes"
+        val tag = "NWT_OPEN"
 
         // Try 1: getLaunchIntentForPackage
-        packageManager.getLaunchIntentForPackage(pkg)?.let {
-            it.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            try { startActivity(it); return } catch (_: Exception) {}
+        val launchIntent = packageManager.getLaunchIntentForPackage(pkg)
+        Log.d(tag, "try1 getLaunchIntentForPackage => $launchIntent")
+        if (launchIntent != null) {
+            launchIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED)
+            try {
+                startActivity(launchIntent)
+                Log.d(tag, "try1 startActivity succeeded")
+                return
+            } catch (e: Exception) {
+                Log.e(tag, "try1 startActivity failed: $e")
+            }
         }
 
         // Try 2: explicit ACTION_MAIN + CATEGORY_LAUNCHER
+        Log.d(tag, "try2 explicit ACTION_MAIN")
         try {
             startActivity(Intent(Intent.ACTION_MAIN).apply {
                 setPackage(pkg)
                 addCategory(Intent.CATEGORY_LAUNCHER)
-                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED)
             })
+            Log.d(tag, "try2 succeeded")
             return
-        } catch (_: Exception) { }
+        } catch (e: Exception) {
+            Log.e(tag, "try2 failed: $e")
+        }
 
         // Try 3: queryIntentActivities to find the real launch activity
         val probe = Intent(Intent.ACTION_MAIN).apply {
@@ -108,17 +122,23 @@ class LogConfirmationActivity : Activity() {
             setPackage(pkg)
         }
         val resolved = packageManager.queryIntentActivities(probe, 0)
+        Log.d(tag, "try3 queryIntentActivities count=${resolved.size}")
         if (resolved.isNotEmpty()) {
             val ai = resolved[0].activityInfo
+            Log.d(tag, "try3 found activity: ${ai.packageName}/${ai.name}")
             try {
                 startActivity(Intent(Intent.ACTION_MAIN).apply {
                     component = android.content.ComponentName(ai.packageName, ai.name)
-                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED)
                 })
+                Log.d(tag, "try3 succeeded")
                 return
-            } catch (_: Exception) { }
+            } catch (e: Exception) {
+                Log.e(tag, "try3 failed: $e")
+            }
         }
 
+        Log.e(tag, "ALL tries failed — opening Play Store")
         android.widget.Toast.makeText(
             this, "Standard Notes not found — opening Play Store", android.widget.Toast.LENGTH_LONG
         ).show()
