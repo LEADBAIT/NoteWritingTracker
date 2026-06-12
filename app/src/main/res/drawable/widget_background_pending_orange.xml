@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Dark amber-tinted base -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#1A1200" />
+            <corners android:radius="18dp" />
+        </shape>
+    </item>
+
+    <!-- Strong orange radial glow — afternoon, getting later (12:00–17:59) -->
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:type="radial"
+                android:gradientRadius="120dp"
+                android:centerX="0.5"
+                android:centerY="0.4"
+                android:startColor="#80E65100"
+                android:endColor="#00E65100" />
+            <corners android:radius="18dp" />
+        </shape>
+    </item>
+
+    <!-- Clearly visible orange border ring -->
+    <item android:top="0dp" android:bottom="0dp" android:left="0dp" android:right="0dp">
+        <shape android:shape="rectangle">
+            <stroke android:width="2dp" android:color="#E65100" />
+            <corners android:radius="18dp" />
+            <solid android:color="#00000000" />
+        </shape>
+    </item>
+
+</layer-list>

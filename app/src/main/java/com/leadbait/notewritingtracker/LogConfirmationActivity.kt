@@ -5,6 +5,10 @@ package com.leadbait.notewritingtracker
 import android.app.Activity
 import android.appwidget.AppWidgetManager
 import android.content.ComponentName
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
+import android.util.Log
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
@@ -30,6 +34,8 @@ class LogConfirmationActivity : Activity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_log_confirmation)
 
+        requestNotificationPermissionIfNeeded()
+
         val alreadyLogged = intent.getBooleanExtra(EXTRA_ALREADY_LOGGED, false)
         val data = WidgetDataManager(this)
 
@@ -50,20 +56,19 @@ class LogConfirmationActivity : Activity() {
             setTextColor(android.graphics.Color.WHITE)
         }
 
-        val btnYes = findViewById<Button>(R.id.btn_yes)
-        val btnNo  = findViewById<Button>(R.id.btn_no)
-        val btnGotIt = findViewById<Button>(R.id.btn_got_it)
+        findViewById<View>(R.id.btn_row_confirm).visibility = View.VISIBLE
+        findViewById<Button>(R.id.btn_got_it).visibility = View.GONE
 
-        btnYes.visibility = View.VISIBLE
-        btnNo.visibility  = View.VISIBLE
-        btnGotIt.visibility = View.GONE
-
-        btnYes.setOnClickListener {
+        findViewById<Button>(R.id.btn_yes).setOnClickListener {
             data.logToday()
+            ReminderReceiver.cancel(this)
             refreshAllWidgets()
             finish()
         }
-        btnNo.setOnClickListener { finish() }
+        findViewById<Button>(R.id.btn_no).setOnClickListener {
+            openNotesApp()
+            finish()
+        }
     }
 
     private fun showAlreadyLoggedMode() {
@@ -73,15 +78,92 @@ class LogConfirmationActivity : Activity() {
             setTextColor(android.graphics.Color.parseColor("#4CAF50"))
         }
 
-        val btnYes = findViewById<Button>(R.id.btn_yes)
-        val btnNo  = findViewById<Button>(R.id.btn_no)
-        val btnGotIt = findViewById<Button>(R.id.btn_got_it)
+        findViewById<View>(R.id.btn_row_confirm).visibility = View.GONE
+        findViewById<Button>(R.id.btn_got_it).visibility = View.VISIBLE
 
-        btnYes.visibility  = View.GONE
-        btnNo.visibility   = View.GONE
-        btnGotIt.visibility = View.VISIBLE
+        findViewById<Button>(R.id.btn_got_it).setOnClickListener { finish() }
+    }
 
-        btnGotIt.setOnClickListener { finish() }
+    private fun openNotesApp() {
+        val pkg = "com.standardnotes"
+        val tag = "NWT_OPEN"
+
+        // Try 1: getLaunchIntentForPackage
+        val launchIntent = packageManager.getLaunchIntentForPackage(pkg)
+        Log.d(tag, "try1 getLaunchIntentForPackage => $launchIntent")
+        if (launchIntent != null) {
+            launchIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED)
+            try {
+                startActivity(launchIntent)
+                Log.d(tag, "try1 startActivity succeeded")
+                return
+            } catch (e: Exception) {
+                Log.e(tag, "try1 startActivity failed: $e")
+            }
+        }
+
+        // Try 2: explicit ACTION_MAIN + CATEGORY_LAUNCHER
+        Log.d(tag, "try2 explicit ACTION_MAIN")
+        try {
+            startActivity(Intent(Intent.ACTION_MAIN).apply {
+                setPackage(pkg)
+                addCategory(Intent.CATEGORY_LAUNCHER)
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED)
+            })
+            Log.d(tag, "try2 succeeded")
+            return
+        } catch (e: Exception) {
+            Log.e(tag, "try2 failed: $e")
+        }
+
+        // Try 3: queryIntentActivities to find the real launch activity
+        val probe = Intent(Intent.ACTION_MAIN).apply {
+            addCategory(Intent.CATEGORY_LAUNCHER)
+            setPackage(pkg)
+        }
+        val resolved = packageManager.queryIntentActivities(probe, 0)
+        Log.d(tag, "try3 queryIntentActivities count=${resolved.size}")
+        if (resolved.isNotEmpty()) {
+            val ai = resolved[0].activityInfo
+            Log.d(tag, "try3 found activity: ${ai.packageName}/${ai.name}")
+            try {
+                startActivity(Intent(Intent.ACTION_MAIN).apply {
+                    component = android.content.ComponentName(ai.packageName, ai.name)
+                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED)
+                })
+                Log.d(tag, "try3 succeeded")
+                return
+            } catch (e: Exception) {
+                Log.e(tag, "try3 failed: $e")
+            }
+        }
+
+        Log.e(tag, "ALL tries failed — opening Play Store")
+        android.widget.Toast.makeText(
+            this, "Standard Notes not found — opening Play Store", android.widget.Toast.LENGTH_LONG
+        ).show()
+
+        // Play Store fallback
+        try {
+            startActivity(Intent(Intent.ACTION_VIEW,
+                android.net.Uri.parse("market://details?id=$pkg"))
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+        } catch (_: Exception) {
+            try {
+                startActivity(Intent(Intent.ACTION_VIEW,
+                    android.net.Uri.parse("https://play.google.com/store/apps/details?id=$pkg"))
+                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+            } catch (_: Exception) { }
+        }
+    }
+
+    private fun requestNotificationPermissionIfNeeded() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (checkSelfPermission(android.Manifest.permission.POST_NOTIFICATIONS)
+                    != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(arrayOf(android.Manifest.permission.POST_NOTIFICATIONS), 0)
+            }
+        }
     }
 
     private fun refreshAllWidgets() {

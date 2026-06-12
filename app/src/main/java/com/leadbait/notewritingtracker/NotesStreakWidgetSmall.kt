@@ -20,8 +20,7 @@ import android.widget.RemoteViews
 class NotesStreakWidgetSmall : AppWidgetProvider() {
 
     companion object {
-        private val COLOR_LOGGED  = Color.parseColor("#4CAF50")
-        private val COLOR_PENDING = Color.parseColor("#9E9E9E")
+        private val COLOR_LOGGED = Color.parseColor("#4CAF50")
 
         fun updateWidget(context: Context, manager: AppWidgetManager, widgetId: Int) {
             val data = WidgetDataManager(context)
@@ -29,11 +28,11 @@ class NotesStreakWidgetSmall : AppWidgetProvider() {
             val streak   = data.getCurrentStreak()
 
             val views = RemoteViews(context.packageName, R.layout.widget_notes_streak_small)
-            val bgRes = if (isLogged) R.drawable.widget_background else R.drawable.widget_background_pending
+            val bgRes = if (isLogged) R.drawable.widget_background else NotesStreakWidget.getPendingBackground()
             views.setInt(R.id.widget_root_small, "setBackgroundResource", bgRes)
             views.setFloat(R.id.tv_flame_small, "setAlpha", if (isLogged) 1.0f else 0.30f)
             views.setTextViewText(R.id.tv_streak_count_small, streak.toString())
-            views.setTextColor(R.id.tv_streak_count_small, if (isLogged) COLOR_LOGGED else COLOR_PENDING)
+            views.setTextColor(R.id.tv_streak_count_small, if (isLogged) COLOR_LOGGED else NotesStreakWidget.getPendingColor())
 
             val tapIntent = Intent(context, NotesStreakWidgetSmall::class.java).apply {
                 action = NotesStreakWidget.ACTION_WIDGET_TAP

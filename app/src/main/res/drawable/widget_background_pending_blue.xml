@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Dark navy base -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#0D0D1E" />
+            <corners android:radius="18dp" />
+        </shape>
+    </item>
+
+    <!-- Strong blue radial glow — calm, day just started (00:00–05:59) -->
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:type="radial"
+                android:gradientRadius="120dp"
+                android:centerX="0.5"
+                android:centerY="0.4"
+                android:startColor="#803A82B5"
+                android:endColor="#003A82B5" />
+            <corners android:radius="18dp" />
+        </shape>
+    </item>
+
+    <!-- Clearly visible blue border ring -->
+    <item android:top="0dp" android:bottom="0dp" android:left="0dp" android:right="0dp">
+        <shape android:shape="rectangle">
+            <stroke android:width="2dp" android:color="#3A82B5" />
+            <corners android:radius="18dp" />
+            <solid android:color="#00000000" />
+        </shape>
+    </item>
+
+</layer-list>
